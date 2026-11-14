@@ -1,0 +1,115 @@
+import type { Workout } from "../types/training";
+
+export const mondayWorkout: Workout = {
+  id: "monday-strength-power",
+  name: "Fuerza y potencia de piernas",
+  weekday: 1,
+  durationMinutes: { minimum: 45, maximum: 50 },
+  focus: "Fuerza funcional, saltos y control del core",
+  exercises: [
+    {
+      exerciseId: "dynamic-mobility",
+      block: "warmup",
+      sets: 1,
+      target: { kind: "instruction", note: "Como parte del calentamiento de 8 min" },
+      restSeconds: { minimum: 0, maximum: 0 },
+    },
+    {
+      exerciseId: "bodyweight-squat",
+      block: "warmup",
+      sets: 1,
+      target: { kind: "repetitions", repetitions: 15 },
+      restSeconds: { minimum: 0, maximum: 0 },
+    },
+    {
+      exerciseId: "alternating-lunge",
+      block: "warmup",
+      sets: 1,
+      target: { kind: "repetitions", repetitions: 10 },
+      restSeconds: { minimum: 0, maximum: 0 },
+    },
+    {
+      exerciseId: "light-skipping",
+      block: "warmup",
+      sets: 1,
+      target: { kind: "duration", durationSeconds: 20 },
+      restSeconds: { minimum: 0, maximum: 0 },
+    },
+    {
+      exerciseId: "progressive-acceleration",
+      block: "warmup",
+      sets: 1,
+      target: { kind: "repetitions", repetitions: 2 },
+      restSeconds: { minimum: 0, maximum: 0 },
+    },
+    {
+      exerciseId: "vertical-jump",
+      block: "plyometrics",
+      sets: 3,
+      target: { kind: "repetitions", repetitions: 5 },
+      restSeconds: { minimum: 60, maximum: 90 },
+    },
+    {
+      exerciseId: "skater-jump",
+      block: "plyometrics",
+      sets: 3,
+      target: { kind: "repetitions", repetitions: 4, perSide: true },
+      restSeconds: { minimum: 60, maximum: 90 },
+    },
+    {
+      exerciseId: "broad-jump",
+      block: "plyometrics",
+      sets: 2,
+      target: { kind: "repetitions", repetitions: 4 },
+      restSeconds: { minimum: 60, maximum: 90 },
+    },
+    {
+      exerciseId: "goblet-squat",
+      block: "strength",
+      sets: 3,
+      target: {
+        kind: "repetitions",
+        minimumRepetitions: 8,
+        maximumRepetitions: 10,
+      },
+      restSeconds: { minimum: 60, maximum: 90 },
+    },
+    {
+      exerciseId: "dumbbell-romanian-deadlift",
+      block: "strength",
+      sets: 3,
+      target: { kind: "repetitions", repetitions: 10 },
+      restSeconds: { minimum: 60, maximum: 90 },
+    },
+    {
+      exerciseId: "bulgarian-split-squat",
+      block: "strength",
+      sets: 3,
+      target: { kind: "repetitions", repetitions: 8, perSide: true },
+      restSeconds: { minimum: 60, maximum: 90 },
+    },
+    {
+      exerciseId: "calf-raise",
+      block: "strength",
+      sets: 3,
+      target: { kind: "repetitions", repetitions: 15 },
+      restSeconds: { minimum: 60, maximum: 60 },
+    },
+    {
+      exerciseId: "front-plank",
+      block: "core",
+      sets: 3,
+      target: { kind: "duration", durationSeconds: 30 },
+      restSeconds: { minimum: 0, maximum: 0 },
+    },
+    {
+      exerciseId: "dead-bug",
+      block: "core",
+      sets: 2,
+      target: { kind: "repetitions", repetitions: 10, perSide: true },
+      restSeconds: { minimum: 0, maximum: 0 },
+    },
+  ],
+};
+
+export const workouts: Workout[] = [mondayWorkout];
