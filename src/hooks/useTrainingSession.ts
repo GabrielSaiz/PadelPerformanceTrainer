@@ -7,6 +7,7 @@ import type {
   WorkoutSession,
 } from "../types/training";
 import { loadAppState, saveAppState } from "../services/storage";
+import { mergeHistory, parseHistory, type HistoryImportResult } from "../services/historyTransfer";
 
 function readInitialState(): { state: PersistedAppState | null; error: string | null } {
   try {
@@ -37,18 +38,20 @@ export function useTrainingSession() {
   const stateRef = useRef(initial.state);
   const [error, setError] = useState<string | null>(initial.error);
 
-  function commit(nextState: PersistedAppState): void {
+  function commit(nextState: PersistedAppState): boolean {
     try {
       saveAppState(nextState);
       stateRef.current = nextState;
       setState(nextState);
       setError(null);
+      return true;
     } catch (saveError) {
       setError(
         saveError instanceof Error
           ? `No se pudieron guardar los cambios: ${saveError.message}`
           : "No se pudieron guardar los cambios en este dispositivo.",
       );
+      return false;
     }
   }
 
@@ -168,6 +171,19 @@ export function useTrainingSession() {
     });
   }
 
+  function importHistory(text: string): HistoryImportResult {
+    const incoming = parseHistory(text);
+    const current = stateRef.current;
+    if (!current) throw new Error("No se pudieron cargar los datos locales.");
+    const merged = mergeHistory(current.sessions, incoming, current.activeSession?.id);
+    if (merged.result.imported > 0 && !commit({ ...current, sessions: merged.sessions })) {
+      throw new Error(
+        "No se pudo guardar el historial en este dispositivo. Tus datos no se han modificado.",
+      );
+    }
+    return merged.result;
+  }
+
   return {
     state,
     error,
@@ -177,5 +193,6 @@ export function useTrainingSession() {
     updateExerciseProgress,
     updateSessionNotes,
     finishWorkout,
+    importHistory,
   };
 }

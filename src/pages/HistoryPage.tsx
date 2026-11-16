@@ -3,8 +3,13 @@ import { exercises } from "../data/exercises";
 import { workouts } from "../data/trainingPlan";
 import type { WorkoutSession } from "../types/training";
 import { formatDuration } from "../utils/format";
+import { HistoryTransfer } from "../components/HistoryTransfer";
+import type { HistoryImportResult } from "../services/historyTransfer";
 
-export function HistoryPage({ sessions }: { sessions: WorkoutSession[] }) {
+export function HistoryPage({ sessions, onImport }: {
+  sessions: WorkoutSession[];
+  onImport: (text: string) => HistoryImportResult;
+}) {
   return (
     <div className="page-stack">
       <div className="page-heading">
@@ -20,6 +25,8 @@ export function HistoryPage({ sessions }: { sessions: WorkoutSession[] }) {
           <span>SESIONES</span>
         </div>
       </div>
+
+      <HistoryTransfer sessions={sessions} onImport={onImport} />
 
       {sessions.length === 0 ? (
         <section className="empty-state card-surface">

@@ -1,5 +1,6 @@
 import {
   CalendarDays,
+  BookOpen,
   ChartNoAxesCombined,
   House,
   PersonStanding,
@@ -8,12 +9,13 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 
-export type AppPage = "home" | "plan" | "workout" | "history";
+export type AppPage = "home" | "plan" | "workout" | "exercises" | "history";
 
 const navigation: { id: AppPage; label: string; icon: LucideIcon }[] = [
   { id: "home", label: "Inicio", icon: House },
   { id: "plan", label: "Semana", icon: CalendarDays },
   { id: "workout", label: "Entrenar", icon: PersonStanding },
+  { id: "exercises", label: "Ejercicios", icon: BookOpen },
   { id: "history", label: "Historial", icon: ChartNoAxesCombined },
 ];
 

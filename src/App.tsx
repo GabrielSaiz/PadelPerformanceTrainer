@@ -5,6 +5,7 @@ import { DashboardPage } from "./pages/DashboardPage";
 import { HistoryPage } from "./pages/HistoryPage";
 import { PlanPage } from "./pages/PlanPage";
 import { WorkoutPage } from "./pages/WorkoutPage";
+import { ExercisesPage } from "./pages/ExercisesPage";
 import { useTrainingSession } from "./hooks/useTrainingSession";
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
     updateExerciseProgress,
     updateSessionNotes,
     finishWorkout,
+    importHistory,
   } = useTrainingSession();
 
   if (!state) {
@@ -73,7 +75,8 @@ export default function App() {
           completedSessions={state.sessions.length}
         />
       )}
-      {activePage === "history" && <HistoryPage sessions={state.sessions} />}
+      {activePage === "history" && <HistoryPage sessions={state.sessions} onImport={importHistory} />}
+      {activePage === "exercises" && <ExercisesPage />}
     </AppShell>
   );
 }

@@ -6,7 +6,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
-function isWorkoutSession(value: unknown): value is WorkoutSession {
+export function isWorkoutSession(value: unknown): value is WorkoutSession {
   if (!isRecord(value)) return false;
   if (
     typeof value.id !== "string" ||

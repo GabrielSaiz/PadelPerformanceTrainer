@@ -2,6 +2,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
+import { serializeHistory } from "./services/historyTransfer";
 
 describe("training flow", () => {
   beforeEach(() => {
@@ -22,11 +23,27 @@ describe("training flow", () => {
     const firstView = render(<App />);
 
     await user.click(screen.getAllByRole("button", { name: "Entrenar" })[0]);
+    expect(screen.getAllByRole("img")).toHaveLength(14);
+    expect(screen.getByRole("img", { name: /Ilustración de Sentadilla goblet/ })).toBeVisible();
     await user.click(screen.getByRole("button", { name: /Empezar entrenamiento/ }));
+    expect(screen.getAllByRole("img")).toHaveLength(14);
+    expect(screen.getByRole("img", { name: /Ilustración de Sentadilla goblet/ })).toBeVisible();
 
     const firstSet = screen.getAllByRole("button", { name: /Serie 1/ })[0];
     await user.click(firstSet);
     expect(firstSet).toHaveAttribute("aria-pressed", "true");
+
+    await user.click(screen.getAllByRole("button", { name: "Ejercicios" })[0]);
+    expect(screen.getByRole("heading", { name: "Todos los ejercicios" })).toBeVisible();
+    expect(screen.getAllByRole("img")).toHaveLength(25);
+    await user.click(screen.getAllByRole("button", { name: "Entrenar" })[0]);
+    expect(screen.getByRole("button", { name: "Movilidad dinámica de tobillo y cadera" }))
+      .toHaveAttribute("aria-expanded", "false");
+    await user.click(screen.getByRole("button", { name: "Movilidad dinámica de tobillo y cadera" }));
+    expect(screen.getAllByRole("button", { name: /Serie 1/ })[0]).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
 
     const savedActiveState = JSON.parse(
       window.localStorage.getItem("padel-performance-trainer") ?? "{}",
@@ -38,9 +55,17 @@ describe("training flow", () => {
     firstView.unmount();
     render(<App />);
     await user.click(screen.getAllByRole("button", { name: "Entrenar" })[0]);
+    expect(screen.getByRole("button", { name: "Movilidad dinámica de tobillo y cadera" }))
+      .toHaveAttribute("aria-expanded", "false");
+    await user.click(screen.getByRole("button", { name: "Movilidad dinámica de tobillo y cadera" }));
     expect(screen.getAllByRole("button", { name: /Serie 1/ })[0]).toHaveAttribute(
       "aria-pressed",
       "true",
+    );
+    expect(screen.getAllByRole("img")).toHaveLength(14);
+    expect(screen.getByRole("img", { name: /Ilustración de Sentadilla goblet/ })).toHaveAttribute(
+      "src",
+      "/images/exercises/sentadilla-goblet.webp",
     );
 
     await user.click(screen.getByRole("button", { name: "Finalizar sesión" }));
@@ -54,5 +79,20 @@ describe("training flow", () => {
     );
     expect(savedState.sessions).toHaveLength(1);
     expect(savedState.activeSession).toBeNull();
+
+    const backup = serializeHistory([
+      savedState.sessions[0],
+      { ...savedState.sessions[0], id: "imported-session", notes: "Imported workout" },
+    ]);
+    const file = new File([backup], "history.json", { type: "application/json" });
+    Object.defineProperty(file, "text", { value: () => Promise.resolve(backup) });
+    await user.upload(screen.getByLabelText("Archivo de historial JSON"), file);
+    expect(await screen.findByRole("status")).toHaveTextContent(
+      "Sesiones importadas: 1. Omitidas por identificador existente: 1.",
+    );
+    expect(screen.getAllByRole("heading", { name: "Fuerza y potencia de piernas" }))
+      .toHaveLength(2);
+    expect(JSON.parse(window.localStorage.getItem("padel-performance-trainer") ?? "{}").sessions)
+      .toHaveLength(2);
   });
 });

@@ -3,6 +3,7 @@ import { exercises } from "../data/exercises";
 import { mondayWorkout } from "../data/trainingPlan";
 import type { ExerciseProgress, WorkoutSession } from "../types/training";
 import { WorkoutRunner } from "../components/WorkoutRunner";
+import { ExerciseImage } from "../components/ExerciseImage";
 
 interface WorkoutPageProps {
   activeSession: WorkoutSession | null;
@@ -127,16 +128,19 @@ export function WorkoutPage(props: WorkoutPageProps) {
                   const exercise = exercises.find(({ id }) => id === item.exerciseId);
                   if (!exercise) return null;
                   return (
-                    <div className="exercise-preview-row" key={item.exerciseId}>
-                      <span className="exercise-index">{String(index + 1).padStart(2, "0")}</span>
-                      <div className="exercise-preview-name">
-                        <strong>{exercise.name}</strong>
-                        <span>{exercise.equipment.length ? exercise.equipment.join(", ") : "Peso corporal"}</span>
+                    <div key={item.exerciseId}>
+                      <div className="exercise-preview-row">
+                        <span className="exercise-index">{String(index + 1).padStart(2, "0")}</span>
+                        <div className="exercise-preview-name">
+                          <strong>{exercise.name}</strong>
+                          <span>{exercise.equipment.length ? exercise.equipment.join(", ") : "Peso corporal"}</span>
+                        </div>
+                        <span className="exercise-prescription">{getTargetLabel(item)}</span>
+                        {item.block === "strength" && (
+                          <Dumbbell className="exercise-row-icon" size={16} aria-hidden="true" />
+                        )}
                       </div>
-                      <span className="exercise-prescription">{getTargetLabel(item)}</span>
-                      {item.block === "strength" && (
-                        <Dumbbell className="exercise-row-icon" size={16} aria-hidden="true" />
-                      )}
+                      <ExerciseImage exercise={exercise} />
                     </div>
                   );
                 })}

@@ -3,6 +3,7 @@ import type { Exercise } from "../types/training";
 export const exercises: Exercise[] = [
   {
     id: "dynamic-mobility",
+    imageFileName: "movilidad-dinamica-de-tobillo-y-cadera.webp",
     name: "Movilidad dinámica de tobillo y cadera",
     description: "Prepara tobillos y caderas con movimientos controlados.",
     instructions: [
@@ -15,6 +16,7 @@ export const exercises: Exercise[] = [
   },
   {
     id: "bodyweight-squat",
+    imageFileName: "sentadillas-sin-peso.webp",
     name: "Sentadillas sin peso",
     description: "Repeticiones de calentamiento con el peso corporal.",
     instructions: [
@@ -27,6 +29,7 @@ export const exercises: Exercise[] = [
   },
   {
     id: "alternating-lunge",
+    imageFileName: "zancadas-alternas.webp",
     name: "Zancadas alternas",
     description: "Zancadas controladas alternando las piernas.",
     instructions: [
@@ -39,6 +42,7 @@ export const exercises: Exercise[] = [
   },
   {
     id: "light-skipping",
+    imageFileName: "skipping.webp",
     name: "Skipping suave",
     description: "Carrera en el sitio con elevación ligera de rodillas.",
     instructions: ["Mantén un ritmo suave y aterriza con ligereza."],
@@ -48,6 +52,7 @@ export const exercises: Exercise[] = [
   },
   {
     id: "progressive-acceleration",
+    imageFileName: "aceleraciones-progresivas-cortas.webp",
     name: "Aceleraciones progresivas cortas",
     description: "Dos salidas cortas aumentando la velocidad gradualmente.",
     instructions: ["Acelera de forma progresiva, sin llegar al máximo."],
@@ -57,6 +62,7 @@ export const exercises: Exercise[] = [
   },
   {
     id: "vertical-jump",
+    imageFileName: "salto-vertical-aterrizaje-controlado.webp",
     name: "Salto vertical con aterrizaje controlado",
     description: "Salto vertical buscando un aterrizaje silencioso y estable.",
     instructions: [
@@ -72,6 +78,7 @@ export const exercises: Exercise[] = [
   },
   {
     id: "skater-jump",
+    imageFileName: "salto-lateral-tipo-skater.webp",
     name: "Salto lateral tipo skater",
     description: "Salto lateral con recepción controlada sobre una pierna.",
     instructions: [
@@ -87,6 +94,7 @@ export const exercises: Exercise[] = [
   },
   {
     id: "broad-jump",
+    imageFileName: "salto-horizontal-con-estabilizacion.webp",
     name: "Salto horizontal con estabilización",
     description: "Salto hacia delante seguido de una recepción estable.",
     instructions: [
@@ -99,6 +107,7 @@ export const exercises: Exercise[] = [
   },
   {
     id: "goblet-squat",
+    imageFileName: "sentadilla-goblet.webp",
     name: "Sentadilla goblet",
     description: "Sentadilla sosteniendo una mancuerna cerca del pecho.",
     instructions: [
@@ -114,6 +123,7 @@ export const exercises: Exercise[] = [
   },
   {
     id: "dumbbell-romanian-deadlift",
+    imageFileName: "peso-rumano-con-marcuernas.webp",
     name: "Peso muerto rumano con mancuernas",
     description: "Bisagra de cadera con mancuernas y espalda estable.",
     instructions: [
@@ -127,6 +137,7 @@ export const exercises: Exercise[] = [
   },
   {
     id: "bulgarian-split-squat",
+    imageFileName: "sentadilla-bulgara.webp",
     name: "Sentadilla búlgara",
     description: "Sentadilla dividida con el pie trasero apoyado en un banco.",
     instructions: [
@@ -139,6 +150,7 @@ export const exercises: Exercise[] = [
   },
   {
     id: "calf-raise",
+    imageFileName: "elevacion-gemelos.webp",
     name: "Elevación de gemelos",
     description: "Elevación controlada sobre la punta de los pies.",
     instructions: [
@@ -151,6 +163,7 @@ export const exercises: Exercise[] = [
   },
   {
     id: "front-plank",
+    imageFileName: "plancha-frontal.webp",
     name: "Plancha frontal",
     description: "Sostén una posición estable apoyado en antebrazos y pies.",
     instructions: [
@@ -163,6 +176,7 @@ export const exercises: Exercise[] = [
   },
   {
     id: "dead-bug",
+    imageFileName: "dead-bug.webp",
     name: "Dead bug",
     description: "Movimiento alterno de brazos y piernas manteniendo el tronco estable.",
     instructions: [
@@ -172,5 +186,115 @@ export const exercises: Exercise[] = [
     equipment: [],
     capacity: "Core",
     safetyTips: ["Reduce el rango si la espalda se despega del suelo."],
+  },
+  {
+    id: "agility-ladder",
+    imageFileName: "escalera-agilidad.webp",
+    name: "Escalera de agilidad",
+    description: "Pasos coordinados a través de una escalera de agilidad.",
+    instructions: ["Avanza entre los espacios con pasos cortos y controlados."],
+    equipment: ["Escalera de agilidad"],
+    capacity: "Agilidad",
+    safetyTips: ["Asegura la escalera al suelo y prioriza la precisión antes de aumentar la velocidad."],
+  },
+  {
+    id: "quick-lateral-steps",
+    imageFileName: "pasos-laterales-rapidos.webp",
+    name: "Pasos laterales rápidos",
+    description: "Pasos cortos de lado a lado manteniendo una postura preparada.",
+    instructions: ["Desplázate lateralmente con pasos cortos, sin cruzar los pies."],
+    equipment: [],
+    capacity: "Agilidad",
+    safetyTips: ["Usa una superficie estable y evita perder el equilibrio al cambiar de dirección."],
+  },
+  {
+    id: "lateral-movement-return",
+    imageFileName: "desplazamiento-lateral-y-vuelta-al-centro.webp",
+    name: "Desplazamiento lateral y vuelta al centro",
+    description: "Salida lateral y recuperación de la posición central.",
+    instructions: ["Sal hacia un lado, frena con control y vuelve al centro.", "Alterna ambos lados."],
+    equipment: [],
+    capacity: "Agilidad",
+    safetyTips: ["Mantén espacio libre a ambos lados y controla la frenada."],
+  },
+  {
+    id: "split-step-lateral-start",
+    imageFileName: "split-step-y-salida-lateral.webp",
+    name: "Split step y salida lateral",
+    description: "Pequeño salto de preparación seguido de una salida lateral.",
+    instructions: ["Realiza un pequeño salto de preparación.", "Aterriza con equilibrio y sal hacia un lado."],
+    equipment: [],
+    capacity: "Agilidad",
+    safetyTips: ["Mantén el salto bajo y aterriza con control antes de desplazarte."],
+  },
+  {
+    id: "drop-catch-tennis-ball",
+    imageFileName: "soltar-y-atrapar-pelota.webp",
+    name: "Soltar y atrapar pelota de tenis",
+    description: "Coordinación de la mano y la vista al soltar y recuperar una pelota.",
+    instructions: ["Suelta la pelota y trata de atraparla con un movimiento controlado."],
+    equipment: ["Pelota de tenis"],
+    capacity: "Reacción",
+    safetyTips: ["Evita inclinarte bruscamente o perseguir una pelota fuera de tu alcance."],
+  },
+  {
+    id: "visual-cue-left-right",
+    imageFileName: "senial-visual-izquierda-derecha.webp",
+    name: "Señal visual izquierda/derecha",
+    description: "Respuesta lateral a una indicación visual.",
+    instructions: ["Desde una posición preparada, responde a la señal desplazándote al lado indicado."],
+    equipment: [],
+    capacity: "Reacción",
+    safetyTips: ["Acuerda las señales y deja espacio suficiente para frenar."],
+  },
+  {
+    id: "auditory-cue-movement",
+    imageFileName: "senial-auditiva-y-desplazamiento.webp",
+    name: "Señal auditiva y desplazamiento",
+    description: "Salida controlada en respuesta a una señal sonora.",
+    instructions: ["Acuerda una señal sonora y el desplazamiento.", "Muévete al escucharla y recupera la posición inicial."],
+    equipment: [],
+    capacity: "Reacción",
+    safetyTips: ["Prioriza una respuesta precisa y una frenada estable."],
+  },
+  {
+    id: "irregular-ball-reaction",
+    imageFileName: "reaccion-con-pelota-irregular.webp",
+    name: "Reacción con pelota irregular",
+    description: "Respuesta a los rebotes variables de una pelota irregular.",
+    instructions: ["Deja rebotar la pelota y responde a su dirección para intentar atraparla."],
+    equipment: ["Pelota irregular"],
+    capacity: "Reacción",
+    safetyTips: ["Despeja la zona y no persigas rebotes que exijan movimientos descontrolados."],
+  },
+  {
+    id: "lateral-movement-short",
+    imageFileName: "desplazamiento-lateral-2-3-metros.webp",
+    name: "Desplazamiento lateral 2–3 metros",
+    description: "Recorrido lateral corto con frenada controlada.",
+    instructions: ["Desplázate lateralmente entre dos puntos separados de 2 a 3 metros."],
+    equipment: [],
+    capacity: "Desplazamientos de pádel",
+    safetyTips: ["Evita cruzar los pies y reserva espacio para frenar."],
+  },
+  {
+    id: "advance-brake-retreat",
+    imageFileName: "avanzar-frenar-retroceder.webp",
+    name: "Avanzar, frenar y retroceder",
+    description: "Transición entre avance, frenada y retroceso.",
+    instructions: ["Avanza, frena con equilibrio y retrocede de forma controlada."],
+    equipment: [],
+    capacity: "Desplazamientos de pádel",
+    safetyTips: ["Comprueba que el espacio detrás de ti esté libre antes de retroceder."],
+  },
+  {
+    id: "diagonal-movement-recovery",
+    imageFileName: "desplazamiento-diagonal-y-recuperacion.webp",
+    name: "Desplazamiento diagonal y recuperación",
+    description: "Salida diagonal seguida de la vuelta a la posición de referencia.",
+    instructions: ["Desplázate en diagonal, estabiliza la frenada y recupera la posición inicial."],
+    equipment: [],
+    capacity: "Desplazamientos de pádel",
+    safetyTips: ["Prioriza cambios de dirección estables, sin giros bruscos de rodilla."],
   },
 ];

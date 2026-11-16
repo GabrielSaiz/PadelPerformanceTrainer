@@ -8,6 +8,7 @@ export interface Exercise {
   equipment: string[];
   capacity: string;
   safetyTips: string[];
+  imageFileName?: string;
 }
 
 export interface WorkoutExercise {

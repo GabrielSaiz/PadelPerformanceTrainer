@@ -1,5 +1,7 @@
 import { Check, ChevronDown, Circle, Clock3, ShieldCheck } from "lucide-react";
+import { useEffect, useId, useRef, useState } from "react";
 import { exercises } from "../data/exercises";
+import { ExerciseImage } from "./ExerciseImage";
 import type {
   ExerciseProgress,
   WorkoutExercise,
@@ -20,6 +22,19 @@ export function ExerciseCard({
   onUpdate,
   onStartRest,
 }: ExerciseCardProps) {
+  const isComplete = progress?.completedSets.filter(Boolean).length === item.sets;
+  const [isCollapsed, setIsCollapsed] = useState(isComplete);
+  const headingRef = useRef<HTMLButtonElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const contentId = useId();
+
+  useEffect(() => {
+    if (isComplete && contentRef.current?.contains(document.activeElement)) {
+      headingRef.current?.focus();
+    }
+    setIsCollapsed(isComplete);
+  }, [isComplete]);
+
   const exercise = exercises.find(({ id }) => id === item.exerciseId);
   if (!exercise || !progress) {
     throw new Error(`Exercise data is missing for "${item.exerciseId}".`);
@@ -35,13 +50,27 @@ export function ExerciseCard({
     <article className={`runner-exercise${completedSets === item.sets ? " exercise-done" : ""}`}>
       <div className="runner-exercise-top">
         <div>
-          <h3>{exercise.name}</h3>
-          <p>{getPrescription(item)}</p>
+          <h3>
+            <button
+              ref={headingRef}
+              className="exercise-collapse-toggle"
+              type="button"
+              aria-expanded={!isCollapsed}
+              aria-controls={contentId}
+              onClick={() => setIsCollapsed((current) => !current)}
+            >
+              {exercise.name}
+              <ChevronDown size={16} aria-hidden="true" />
+            </button>
+          </h3>
+          {!isCollapsed && <p>{getPrescription(item)}</p>}
         </div>
-        <span className="exercise-set-count">
+        {!isCollapsed && <span className="exercise-set-count">
           {completedSets}/{item.sets}
-        </span>
+        </span>}
       </div>
+      <div id={contentId} ref={contentRef} hidden={isCollapsed}>
+      <ExerciseImage exercise={exercise} />
       {item.block === "strength" && (
         <label className="load-input">
           <span>Carga usada</span>
@@ -130,6 +159,7 @@ export function ExerciseCard({
           ))}
         </ul>
       </details>
+      </div>
     </article>
   );
 }
