@@ -8,7 +8,7 @@ import { ExerciseImage } from "../components/ExerciseImage";
 interface WorkoutPageProps {
   activeSession: WorkoutSession | null;
   onStart: () => void;
-  onToggleSet: (exerciseId: string, setIndex: number) => void;
+  onToggleSet: (exerciseId: string, setIndex: number) => boolean;
   onUpdateExercise: (
     exerciseId: string,
     update: (progress: ExerciseProgress) => ExerciseProgress,

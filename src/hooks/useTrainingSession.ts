@@ -110,20 +110,20 @@ export function useTrainingSession() {
 
   function updateActiveSession(
     update: (session: WorkoutSession) => WorkoutSession,
-  ): void {
-    if (!state?.activeSession) return;
-    commit({
-      ...state,
-      activeSession: update(state.activeSession),
+  ): boolean {
+    const current = stateRef.current;
+    if (!current?.activeSession) return false;
+    return commit({
+      ...current,
+      activeSession: update(current.activeSession),
     });
   }
 
-  function toggleSet(exerciseId: string, setIndex: number): void {
-    updateActiveSession((session) => {
+  function toggleSet(exerciseId: string, setIndex: number): boolean {
+    const progress = stateRef.current?.activeSession?.exerciseProgress[exerciseId];
+    if (!progress || setIndex < 0 || setIndex >= progress.completedSets.length) return false;
+    return updateActiveSession((session) => {
       const progress = session.exerciseProgress[exerciseId];
-      if (!progress || setIndex < 0 || setIndex >= progress.completedSets.length) {
-        return session;
-      }
       const completedSets = [...progress.completedSets];
       completedSets[setIndex] = !completedSets[setIndex];
       return {

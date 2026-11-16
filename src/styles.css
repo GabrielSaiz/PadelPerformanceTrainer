@@ -1460,9 +1460,9 @@ h3 {
 }
 
 .active-rest-panel {
-  display: flex;
-  align-items: center;
-  gap: 11px;
+  display: grid;
+  gap: 8px;
+  margin: 12px 0;
   padding: 13px 15px;
   border: 1px solid #dfe8bb;
   border-radius: 7px;
@@ -1470,23 +1470,48 @@ h3 {
   background: #f9fbe9;
 }
 
-.active-rest-panel > svg {
-  flex: 0 0 auto;
-}
-
-.active-rest-panel div {
-  display: grid;
-  gap: 3px;
+.active-rest-panel .countdown-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .active-rest-panel strong {
   font-size: 10px;
 }
 
-.active-rest-panel span {
+.active-rest-panel .countdown-time {
   color: #5b6944;
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.countdown-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.countdown-actions button {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid #bbce7a;
+  border-radius: 6px;
+  color: #344a25;
+  background: white;
+  font: inherit;
+  cursor: pointer;
+}
+
+.countdown-actions button[aria-disabled="true"] {
+  color: #647168;
+  cursor: default;
+}
+
+.countdown-start {
+  min-height: 44px;
 }
 
 .session-notes {

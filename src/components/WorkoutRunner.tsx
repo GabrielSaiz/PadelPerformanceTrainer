@@ -7,7 +7,7 @@ import type {
   WorkoutSession,
 } from "../types/training";
 import { formatDuration } from "../utils/format";
-import { ActiveRestTimer, useRestTimer } from "./RestTimer";
+import { useCountdown } from "./RestTimer";
 import { ExerciseCard } from "./ExerciseCard";
 
 const blockDetails = [
@@ -19,7 +19,7 @@ const blockDetails = [
 
 interface WorkoutRunnerProps {
   session: WorkoutSession;
-  onToggleSet: (exerciseId: string, setIndex: number) => void;
+  onToggleSet: (exerciseId: string, setIndex: number) => boolean;
   onUpdateExercise: (
     exerciseId: string,
     update: (progress: ExerciseProgress) => ExerciseProgress,
@@ -35,7 +35,7 @@ export function WorkoutRunner({
   onUpdateNotes,
   onFinish,
 }: WorkoutRunnerProps) {
-  const { activeRest, begin } = useRestTimer();
+  const timer = useCountdown();
   const [showFinishMessage, setShowFinishMessage] = useState(false);
   const allSets = mondayWorkout.exercises.reduce((total, item) => total + item.sets, 0);
   const completedSets = mondayWorkout.exercises.reduce(
@@ -87,14 +87,6 @@ export function WorkoutRunner({
         </div>
       </div>
 
-      {activeRest && (
-        <ActiveRestTimer
-          key={activeRest.key}
-          seconds={activeRest.seconds}
-          exerciseName={activeRest.exerciseName}
-        />
-      )}
-
       {nextExerciseName && (
         <div className="next-exercise">
           <span className="next-exercise-icon"><Flag size={16} aria-hidden="true" /></span>
@@ -125,7 +117,7 @@ export function WorkoutRunner({
                     progress={session.exerciseProgress[item.exerciseId]}
                     onToggleSet={(setIndex) => onToggleSet(item.exerciseId, setIndex)}
                     onUpdate={(update) => onUpdateExercise(item.exerciseId, update)}
-                    onStartRest={(seconds, name) => begin(seconds, name)}
+                    timer={timer}
                   />
                 ))}
               </div>

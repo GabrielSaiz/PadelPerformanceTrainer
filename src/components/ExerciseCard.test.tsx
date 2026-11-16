@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import { mondayWorkout } from "../data/trainingPlan";
 import { ExerciseCard } from "./ExerciseCard";
+import { useCountdown } from "./RestTimer";
 import type { ExerciseProgress } from "../types/training";
 
 const item = mondayWorkout.exercises.find(({ exerciseId }) => exerciseId === "goblet-squat")!;
 
 function Card({ completed = false }: { completed?: boolean }) {
+  const timer = useCountdown();
   const [progress, setProgress] = useState<ExerciseProgress>({
     completedSets: Array.from({ length: item.sets }, () => completed),
     notes: "Keep this note",
@@ -18,12 +20,15 @@ function Card({ completed = false }: { completed?: boolean }) {
     <ExerciseCard
       item={item}
       progress={progress}
-      onToggleSet={(index) => setProgress((current) => ({
-        ...current,
-        completedSets: current.completedSets.map((done, setIndex) => setIndex === index ? !done : done),
-      }))}
+      onToggleSet={(index) => {
+        setProgress((current) => ({
+          ...current,
+          completedSets: current.completedSets.map((done, setIndex) => setIndex === index ? !done : done),
+        }));
+        return true;
+      }}
       onUpdate={setProgress}
-      onStartRest={vi.fn()}
+      timer={timer}
     />
   );
 }

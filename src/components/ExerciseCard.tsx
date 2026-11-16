@@ -2,6 +2,7 @@ import { Check, ChevronDown, Circle, Clock3, ShieldCheck } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import { exercises } from "../data/exercises";
 import { ExerciseImage } from "./ExerciseImage";
+import { CountdownPanel, type CountdownController } from "./RestTimer";
 import type {
   ExerciseProgress,
   WorkoutExercise,
@@ -10,9 +11,9 @@ import type {
 interface ExerciseCardProps {
   item: WorkoutExercise;
   progress: ExerciseProgress | undefined;
-  onToggleSet: (setIndex: number) => void;
+  onToggleSet: (setIndex: number) => boolean;
   onUpdate: (update: (progress: ExerciseProgress) => ExerciseProgress) => void;
-  onStartRest: (seconds: number, name: string) => void;
+  timer: CountdownController;
 }
 
 export function ExerciseCard({
@@ -20,7 +21,7 @@ export function ExerciseCard({
   progress,
   onToggleSet,
   onUpdate,
-  onStartRest,
+  timer,
 }: ExerciseCardProps) {
   const isComplete = progress?.completedSets.filter(Boolean).length === item.sets;
   const [isCollapsed, setIsCollapsed] = useState(isComplete);
@@ -41,10 +42,7 @@ export function ExerciseCard({
   }
 
   const completedSets = progress.completedSets.filter(Boolean).length;
-  const restSeconds =
-    item.restSeconds.minimum === item.restSeconds.maximum
-      ? item.restSeconds.minimum
-      : Math.round((item.restSeconds.minimum + item.restSeconds.maximum) / 2);
+  const durationSeconds = item.target.kind === "duration" ? item.target.durationSeconds : undefined;
 
   return (
     <article className={`runner-exercise${completedSets === item.sets ? " exercise-done" : ""}`}>
@@ -69,8 +67,26 @@ export function ExerciseCard({
           {completedSets}/{item.sets}
         </span>}
       </div>
+      <div hidden={isCollapsed}>
+        <ExerciseImage exercise={exercise} />
+      </div>
+      {timer.countdown?.exerciseId === item.exerciseId && (
+        <CountdownPanel timer={timer} onCancel={() => {
+          timer.cancel();
+          headingRef.current?.focus();
+        }} />
+      )}
       <div id={contentId} ref={contentRef} hidden={isCollapsed}>
-      <ExerciseImage exercise={exercise} />
+      {durationSeconds !== undefined && durationSeconds > 0 && (
+        <button
+          className="rest-start-button countdown-start"
+          type="button"
+          onClick={() => timer.begin("exercise", item.exerciseId, exercise.name, durationSeconds)}
+        >
+          <Clock3 size={14} aria-hidden="true" />
+          Empezar · {durationSeconds} s
+        </button>
+      )}
       {item.block === "strength" && (
         <label className="load-input">
           <span>Carga usada</span>
@@ -106,7 +122,16 @@ export function ExerciseCard({
             key={index}
             type="button"
             aria-pressed={isComplete}
-            onClick={() => onToggleSet(index)}
+            onClick={() => {
+              if (!onToggleSet(index)) return;
+              if (!isComplete && item.restSeconds.maximum > 0) {
+                timer.begin("rest", item.exerciseId, exercise.name, item.restSeconds.maximum, index);
+              } else if (isComplete && timer.countdown?.kind === "rest" &&
+                         timer.countdown.exerciseId === item.exerciseId &&
+                         timer.countdown.setIndex === index) {
+                timer.cancel();
+              }
+            }}
           >
             {isComplete ? (
               <Check size={16} aria-hidden="true" />
@@ -118,19 +143,6 @@ export function ExerciseCard({
           </button>
         ))}
       </div>
-
-      {completedSets > 0 && item.restSeconds.maximum > 0 && (
-        <button
-          className="rest-start-button"
-          type="button"
-          onClick={() => onStartRest(restSeconds, exercise.name)}
-        >
-          <Clock3 size={14} aria-hidden="true" />
-          Iniciar descanso · {item.restSeconds.minimum === item.restSeconds.maximum
-            ? `${restSeconds} s`
-            : `${item.restSeconds.minimum}–${item.restSeconds.maximum} s`}
-        </button>
-      )}
 
       <label className="exercise-notes">
         <span>Nota</span>

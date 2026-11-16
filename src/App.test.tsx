@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
@@ -16,6 +16,41 @@ describe("training flow", () => {
   afterEach(() => {
     cleanup();
     vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  it("keeps rest and set state consistent when local storage fails", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(screen.getAllByRole("button", { name: "Entrenar" })[0]);
+    await user.click(screen.getByRole("button", { name: /Empezar entrenamiento/ }));
+    const squat = screen.getByRole("heading", { name: "Sentadilla goblet" }).closest("article")!;
+    const save = vi.spyOn(Storage.prototype, "setItem");
+    save.mockImplementationOnce(() => { throw new Error("storage full"); });
+    await user.click(within(squat).getByRole("button", { name: "Serie 1 Marcar" }));
+    expect(screen.getByRole("alert")).toHaveTextContent("storage full");
+    expect(within(squat).queryByRole("timer")).not.toBeInTheDocument();
+    expect(JSON.parse(localStorage.getItem("padel-performance-trainer")!).activeSession
+      .exerciseProgress["goblet-squat"].completedSets[0]).toBe(false);
+    await user.click(within(squat).getByRole("button", { name: "Serie 1 Marcar" }));
+    expect(within(squat).getByRole("timer")).toHaveTextContent("01:30");
+    save.mockImplementationOnce(() => { throw new Error("storage full"); });
+    await user.click(within(squat).getByRole("button", { name: "Serie 1 Hecha" }));
+    expect(screen.getByRole("alert")).toHaveTextContent("storage full");
+    expect(within(squat).getByRole("timer")).toBeVisible();
+    expect(JSON.parse(localStorage.getItem("padel-performance-trainer")!).activeSession
+      .exerciseProgress["goblet-squat"].completedSets[0]).toBe(true);
+    await user.click(within(squat).getByRole("button", { name: "Serie 1 Hecha" }));
+    expect(within(squat).queryByRole("timer")).not.toBeInTheDocument();
+    expect(JSON.parse(localStorage.getItem("padel-performance-trainer")!).activeSession
+      .exerciseProgress["goblet-squat"].completedSets[0]).toBe(false);
+    await user.click(within(squat).getByRole("button", { name: "Serie 1 Marcar" }));
+    save.mockClear();
+    await user.click(within(squat).getByRole("button", { name: "Continuar" }));
+    expect(within(squat).queryByRole("timer")).not.toBeInTheDocument();
+    expect(save).not.toHaveBeenCalled();
+    expect(JSON.parse(localStorage.getItem("padel-performance-trainer")!).activeSession
+      .exerciseProgress["goblet-squat"].completedSets[0]).toBe(true);
   });
 
   it("saves completed sets, resumes them, and adds a finished workout to history", async () => {
