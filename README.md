@@ -21,6 +21,27 @@ npm test
 npm run build
 ```
 
+## Instalación en Android (PWA)
+
+La app es una Progressive Web App: tiene manifiesto, iconos y un service worker que precarga la interfaz y las ilustraciones, así que funciona sin conexión tras la primera visita.
+
+1. En GitHub, ve a **Settings → Pages** y en **Source** elige **GitHub Actions** (solo la primera vez).
+2. Cada push a `main` ejecuta `.github/workflows/deploy-pages.yml`: pasa los tests, compila con `BASE_PATH=/PadelPerformanceTrainer/` y publica en `https://<usuario>.github.io/PadelPerformanceTrainer/`.
+3. En el móvil, abre esa URL en Chrome → menú **⋮** → **Instalar aplicación**.
+
+Las actualizaciones se aplican automáticamente al abrir la app con conexión; la página se recarga una vez y el progreso guardado se conserva, aunque un cronómetro en curso se reinicia. Para probar la build de producción en local:
+
+```bash
+BASE_PATH=/PadelPerformanceTrainer/ npm run build
+npx vite preview --base /PadelPerformanceTrainer/
+```
+
+Con Node 25 o superior, ejecuta los tests con `NODE_OPTIONS=--no-experimental-webstorage npm test`: el `localStorage` nativo de Node oculta el de jsdom.
+
+Los datos de cada dispositivo son independientes: usa **Exportar/Importar historial** para trasladarlos.
+
+## Datos y funcionamiento
+
 Las sesiones activas, cargas, notas e historial se guardan en LocalStorage en el navegador actual. No se sincronizan entre dispositivos. El plan deportivo está separado de los componentes en `src/data/`.
 
 Durante el entrenamiento, completar la última serie pliega automáticamente el ejercicio y deja visible su título. Pulsa el título para desplegarlo y revisar o corregir series, cargas y notas. Los ejercicios completados también aparecen plegados al reanudar la sesión; el progreso no se modifica al plegar o desplegar.
